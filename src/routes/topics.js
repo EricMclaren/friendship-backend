@@ -9,6 +9,7 @@ import {
   delTopic,
   updateTopic,
   getUserTopics,
+  getUsersInTopic,
   createUserTopic,
   delUserTopic,
 } from '../handlers/topics';
@@ -82,11 +83,19 @@ const topics = [
     config: merge({}, validateTopicId, getAuthWithScope('admin')),
     handler: updateTopic,
   },
+  // Get all topics of user
   {
     method: 'GET',
     path: '/user_topic/{userId}',
     config: getAuthWithScope('user'),
     handler: getUserTopics,
+  },
+  // Get all users of a tag
+  {
+    method: 'GET',
+    path: '/user_topic/topic/{topicId}',
+    config: getAuthWithScope('user'),
+    handler: getUsersInTopic,
   },
   // Add new topic to a user
   // Love is a boolean. True = love, false = hate the topic.

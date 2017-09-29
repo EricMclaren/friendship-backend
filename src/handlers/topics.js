@@ -8,6 +8,7 @@ import {
   dbUpdateTopic,
   dbCreateUserTopic,
   dbGetUserTopics,
+  dbGetUsersInTopic,
   dbDelUserTopic,
 } from '../models/topics';
 
@@ -77,6 +78,9 @@ export const createUserTopic = (request, reply) => {
 export const getUserTopics = (request, reply) =>
   dbGetUserTopics(request.params.userId).then(reply);
 
+export const getUsersInTopic = (request, reply) =>
+  dbGetUsersInTopic(request.params.topicId).then(reply);
+
 // Delete a topic that is connected to a user
 export const delUserTopic = (request, reply) => {
   if (request.pre.user.id !== parseInt(request.payload.userId, 10)) {
@@ -89,4 +93,3 @@ export const delUserTopic = (request, reply) => {
 
   return dbDelUserTopic(request.payload.userId, request.payload.topicId).then(reply);
 };
-

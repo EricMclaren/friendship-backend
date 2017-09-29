@@ -2,6 +2,8 @@ import knex from '../utils/db';
 
 const topicListFields = ['id', 'name'];
 const userTopicListFields = ['userId', 'topicId', 'love'];
+const topicUserListFields = ['user_topic.userId', 'users.username', 'user_topic.topicId', 'love'];
+const pageLimit = 10;
 
 export const dbGetTopics = () => knex('topics').select(topicListFields);
 
@@ -37,6 +39,12 @@ export const dbGetUserTopics = userId =>
   knex('user_topic')
     .select(userTopicListFields)
     .where({ userId });
+    //  Get all topics that a user has chosen to be either loved or hated
+export const dbGetUsersInTopic = topicId =>
+  knex('user_topic')
+    .select(topicUserListFields)
+    .join('users', 'user_topic.userId', '=', 'users.id')
+    .where({ topicId });
 
 // Add a new topic that a user loves/hates
 export const dbCreateUserTopic = ({ ...fields }) =>
