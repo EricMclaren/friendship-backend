@@ -69,7 +69,7 @@ export const createUserTag = (request, reply) => {
       }
     });
 };
-<<<<<<< HEAD
+
 // Get all tags of a user
 export const getUserTags = (request, reply) =>
   dbGetUserTags(request.params.userId).then(reply);
@@ -82,10 +82,6 @@ export const getUsersInTag = (request, reply) =>
 
 export const countTagLikes = (request, reply) =>
   dbGetCountLikes(request.params.tagId).then(reply);
-=======
-
-export const getUserTags = (request, reply) => dbGetUserTags(request.params.userId).then(reply);
->>>>>>> profileBackend
 
 // Delete a tag that is connected to a user
 export const delUserTag = (request, reply) => {

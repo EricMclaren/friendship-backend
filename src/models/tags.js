@@ -2,12 +2,8 @@ import knex from '../utils/db';
 
 const tagListFields = ['id', 'user_id', 'name', 'category', 'createdAt'];
 const userTagListFields = ['userId', 'tagId', 'love'];
-<<<<<<< HEAD
 const tagUserListFields = ['user_tag.userId', 'users.username', 'user_tag.tagId', 'love', 'emoji'];
-
-=======
 const tagsForUser = ['id', 'name', 'category', 'love'];
->>>>>>> profileBackend
 
 export const dbGetTags = () => knex('tags').select(tagListFields);
 

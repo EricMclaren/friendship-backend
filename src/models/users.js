@@ -3,9 +3,6 @@ import { sendVerificationEmail } from '../utils/email';
 
 const crypto = require('crypto');
 
-<<<<<<< HEAD
-const userListFields = ['id',  'createdAt', 'email', 'scope', 'username', 'description', 'emoji', 'compatibility', 'active', 'status'];
-=======
 const userListFields = [
   'id',
   'email',
@@ -15,7 +12,6 @@ const userListFields = [
   'compatibility',
   'active',
 ];
->>>>>>> profileBackend
 const pageLimit = 10;
 
 export const dbGetUsers = () =>
