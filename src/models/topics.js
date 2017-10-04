@@ -2,7 +2,7 @@ import knex from '../utils/db';
 
 const topicListFields = ['id', 'name'];
 const userTopicListFields = ['userId', 'topicId', 'love'];
-const topicUserListFields = ['user_topic.userId', 'users.username', 'user_topic.topicId', 'love'];
+const topicUserListFields = ['user_topic.userId', 'users.username', 'user_topic.topicId', 'love', 'emoji'];
 const pageLimit = 10;
 
 export const dbGetTopics = () => knex('topics').select(topicListFields);
@@ -33,13 +33,12 @@ export const dbUpdateTopic = (id, fields) =>
     .where({ id })
     .returning('*');
 
-
 //  Get all topics that a user has chosen to be either loved or hated
 export const dbGetUserTopics = userId =>
   knex('user_topic')
     .select(userTopicListFields)
     .where({ userId });
-    //  Get all topics that a user has chosen to be either loved or hated
+//  Get all users that have chosen to either love or hate a tag
 export const dbGetUsersInTopic = topicId =>
   knex('user_topic')
     .select(topicUserListFields)
