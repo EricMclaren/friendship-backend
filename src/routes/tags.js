@@ -96,7 +96,7 @@ const tags = [
     method: 'GET',
     path: '/tag_user/tag/{tagId}',
     config: getAuthWithScope('user'),
-    handler: getUsersInTopic,
+    handler: getUsersInTag,
   },
   {
     method: 'GET',
