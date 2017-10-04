@@ -7,9 +7,11 @@ exports.up = knex =>
      */
     .createTableIfNotExists('users', (table) => {
       table.increments('id').primary();
-      table.timestamp('createdAt').defaultTo(knex.fn.now());
+      table.timestamp('createdAt').notNullable();
       table.enum('scope', ['admin', 'user']).notNullable();
       table.text('email').notNullable().unique();
+      table.boolean('active').defaultTo(false);
+      table.integer('gender').references('id').inTable('genders');
       table.text('description');
       table.text('username');
       table.text('emoji'); // @TODO: This should be a binary image called 'mood', create a table 'emojis' for this later and make a reference
@@ -18,6 +20,7 @@ exports.up = knex =>
       table.text('location');
       table.boolean('enableMatching');
       table.date('birthday');
+      table.text('status');
     })
     /**
      * Define a separate table for storing user secrets (such as password hashes).

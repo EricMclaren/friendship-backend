@@ -3,10 +3,10 @@ import { sendVerificationEmail } from '../utils/email';
 
 const crypto = require('crypto');
 
-const userListFields = ['id', 'email', 'username', 'description', 'emoji', 'compatibility'];
+const userListFields = ['id',  'createdAt', 'email', 'scope', 'username', 'description', 'emoji', 'compatibility', 'active', 'status'];
 const pageLimit = 10;
 
-export const dbGetUsers = () => knex('users').select(userListFields);
+export const dbGetUsers = () => knex('users').select(userListFields).orderBy('id', 'asc');
 
 export const dbGetUsersBatch = pageNumber =>
   knex('users')
@@ -33,6 +33,22 @@ export const dbUpdateUser = (id, fields) =>
     .update({ ...fields })
     .where({ id })
     .returning('*');
+
+export const dbFetchUserBan = id =>
+  knex('banned_users').where('user_id', '=', id);
+
+
+export const dbBanUser = (id, fields) => {
+  fields = {
+    ...fields,
+    user_id: id,
+  };
+
+  return knex('banned_users')
+      .returning('*')
+      .insert(fields);
+};
+
 
 export const dbDelUser = id =>
   knex('users')

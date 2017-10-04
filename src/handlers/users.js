@@ -7,12 +7,15 @@ import {
   dbGetUsersBatch,
   dbGetUser,
   dbDelUser,
+  dbBanUser,
+  dbFetchUserBan,
   dbUpdateUser,
   dbCreateUser,
   dbGetEmailVerification,
   dbDelVerificationHash,
   dbGetUserByUsername,
 } from '../models/users';
+import moment from 'moment';
 
 export const getUsers = (request, reply) => dbGetUsers().then(reply);
 
@@ -50,14 +53,14 @@ export const updateUser = async (request, reply) => {
     );
   }
 
-  const fields = {
-    email: request.payload.email,
-    description: request.payload.description,
-    image: request.payload.image,
-  };
+  const fields = {};
+
+  for(let field in request.payload) {
+    fields[field] = request.payload[field];
+  }
 
   // Only admins are allowed to modify user scope
-  if (request.pre.user.scope === 'admin') {
+  if (request.pre.user.scope === 'admin' && request.payload.scope) {
     fields.scope = request.payload.scope;
   }
 
@@ -68,6 +71,25 @@ export const updateUser = async (request, reply) => {
   }
 
   return dbUpdateUser(request.params.userId, fields).then(reply);
+};
+
+export const banUser = (request, reply) => {
+  if (request.pre.user.scope !== 'admin' && request.pre.user.id !== request.params.userId) {
+    return reply(Boom.unauthorized('You don\'t have the permissions to do this action'))
+  }
+
+  const fields = {
+    user_id: request.payload.userId,
+    banned_by: request.pre.user.id,
+    reason: request.payload.reason,
+    expire: !request.payload.expire || request.payload.expire === 'x' ? null : moment().add(request.payload.expire.split(':')[0], request.payload.expire.split(':')[1]).utc().toISOString(),
+  };
+
+  return dbFetchUserBan(request.params.userId).then((result) => {
+    if (result.length) return reply(Boom.conflict('User is already banned'));
+
+    return dbBanUser(request.params.userId, fields).then(reply);
+  });
 };
 
 export const authUser = (request, reply) =>

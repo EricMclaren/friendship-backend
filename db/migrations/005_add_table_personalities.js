@@ -15,13 +15,13 @@ exports.up = knex =>
           .unsigned()
           .notNullable()
           .references('id')
-          .inTable('users');
+          .inTable('users').onDelete('CASCADE');
       table
           .integer('personalityId')
           .unsigned()
           .notNullable()
           .references('id')
-          .inTable('personalities');
+          .inTable('personalities').onDelete('CASCADE');
       table.primary(['userId', 'personalityId']);
       table.integer('level').notNullable();
     }).then(() =>
@@ -29,5 +29,5 @@ exports.up = knex =>
 
 exports.down = knex =>
   knex.schema
-    .table.dropTableIfExists('topics')
-    .table.dropTableIfExists('user_topic');
+    .table.dropTableIfExists('personalities')
+    .table.dropTableIfExists('user_personality');
